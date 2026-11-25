@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  auth-security-service:
+    build: .
+    container_name: auth_security_microservice
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=False
+      - TOTP_ISSUER=AuthSecurityService
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
